@@ -3,12 +3,13 @@ import { ActivityIndicator, Pressable, StatusBar as NativeStatusBar, StyleSheet,
 import { StatusBar } from 'expo-status-bar';
 import { AppDataProvider, useAppData } from './src/data/AppDataContext';
 import { ItemsScreen } from './src/screens/ItemsScreen';
-import { ManageScreen } from './src/screens/ManageScreen';
+import { CategoriesScreen } from './src/screens/CategoriesScreen';
+import { TravelScreen } from './src/screens/TravelScreen';
 import { translate } from './src/i18n/translations';
 import { ThemeProvider, useTheme } from './src/ThemeContext';
 import { ThemeColors } from './src/theme';
 
-type Tab = 'items' | 'shopping' | 'manage';
+type Tab = 'items' | 'shopping' | 'categories' | 'travel';
 
 function AppContent() {
   const { data, ready } = useAppData();
@@ -20,11 +21,12 @@ function AppContent() {
   return (
     <View style={styles.safe}>
       <StatusBar style={isDark ? 'light' : 'dark'} />
-      <View style={styles.screen}>{tab === 'items' ? <ItemsScreen /> : tab === 'shopping' ? <ItemsScreen shopping /> : <ManageScreen />}</View>
+      <View style={styles.screen}>{tab === 'items' ? <ItemsScreen /> : tab === 'shopping' ? <ItemsScreen shopping /> : tab === 'categories' ? <CategoriesScreen /> : <TravelScreen />}</View>
       <View style={styles.nav}>
         <NavButton icon="🎒" label={t('items')} active={tab === 'items'} onPress={() => setTab('items')} />
         <NavButton icon="🛒" label={t('shopping')} active={tab === 'shopping'} onPress={() => setTab('shopping')} badge={data.items.filter((item) => !item.owned).length} />
-        <NavButton icon="✈" label={t('manage')} active={tab === 'manage'} onPress={() => setTab('manage')} />
+        <NavButton icon="▦" label={t('categories')} active={tab === 'categories'} onPress={() => setTab('categories')} />
+        <NavButton icon="✈" label={t('travel')} active={tab === 'travel'} onPress={() => setTab('travel')} />
       </View>
     </View>
   );
