@@ -22,7 +22,7 @@ Do not introduce accounts, cloud synchronization, analytics, advertising, or net
 - TypeScript in strict mode; do not weaken compiler settings to hide errors.
 - `expo-sqlite/kv-store` for on-device persistence. The key `pakipaki.data.v1` is a persisted schema contract.
 - Plain React context and hooks for current state management.
-- React Native `StyleSheet` and the shared values in `src/theme.ts` for presentation.
+- React Native `StyleSheet`, `ThemeProvider`, and the paired palettes in `src/theme.ts` for presentation. The app follows the device color scheme; UI code must use `useTheme()` rather than importing a fixed palette.
 - No navigation framework in the MVP; `App.tsx` owns the three-tab shell.
 - Minimum supported Node.js version: 22.13.
 
@@ -37,6 +37,7 @@ src/data/                      Persistence context and first-run seed data
 src/domain/                    Domain types and pure business rules
 src/i18n/                      Typed German/English translations
 src/screens/                   Screen-level UI
+src/ThemeContext.tsx           Live system light/dark appearance selection
 src/theme.ts                   Shared colors and visual tokens
 doc/concepts.md                Original product concept
 ```

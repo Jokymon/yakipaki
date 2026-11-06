@@ -18,6 +18,7 @@ With an Android device, enable USB debugging and accept the debugging prompt. Al
 - User-managed categories, travel phases, and travel groups
 - Category, phase, group, short-use, and single-phase filters
 - German and English UI, switched from the Plan screen
+- Automatic light and dark themes following the device setting
 - Seed itinerary and items so the first launch is immediately playable
 
 Data is stored only on the device through `expo-sqlite/kv-store`. The current schema is intentionally versioned so it can later migrate to relational SQLite tables without changing the screens.

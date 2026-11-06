@@ -4,7 +4,7 @@
     "slug": "pakipaki",
     "version": "0.1.0",
     "orientation": "portrait",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "android": {
       "package": "ch.pakipaki.app",
       "adaptiveIcon": {

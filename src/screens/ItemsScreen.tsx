@@ -6,10 +6,13 @@ import { useAppData } from '../data/AppDataContext';
 import { Filter, PackingItem } from '../domain/types';
 import { itemUsageDays, matchesFilter } from '../domain/packing';
 import { translate } from '../i18n/translations';
-import { colors } from '../theme';
+import { useTheme } from '../ThemeContext';
+import { ThemeColors } from '../theme';
 
 export function ItemsScreen({ shopping = false }: { shopping?: boolean }) {
   const { data, saveItem, deleteItem } = useAppData();
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const t = (key: Parameters<typeof translate>[1]) => translate(data.language, key);
   const [filter, setFilter] = useState<Filter>({ kind: 'all' });
   const [editor, setEditor] = useState<PackingItem | 'new' | null>(null);
@@ -66,13 +69,13 @@ export function ItemsScreen({ shopping = false }: { shopping?: boolean }) {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background }, headingRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingTop: 16, paddingBottom: 14 },
   eyebrow: { color: colors.primary, fontSize: 12, fontWeight: '800', textTransform: 'uppercase', letterSpacing: 0.7 }, title: { color: colors.ink, fontSize: 28, fontWeight: '900', letterSpacing: -0.6 },
-  addButton: { width: 48, height: 48, borderRadius: 16, backgroundColor: colors.primary, alignItems: 'center', justifyContent: 'center' }, addText: { color: '#FFFFFF', fontSize: 27, lineHeight: 30 },
+  addButton: { width: 48, height: 48, borderRadius: 16, backgroundColor: colors.primary, alignItems: 'center', justifyContent: 'center' }, addText: { color: colors.onPrimary, fontSize: 27, lineHeight: 30 },
   filterLabel: { marginLeft: 20, color: colors.muted, fontSize: 12, fontWeight: '800', textTransform: 'uppercase', marginBottom: 7 }, chips: { gap: 7, paddingHorizontal: 20, paddingBottom: 15 },
   list: { paddingHorizontal: 16, paddingBottom: 120, gap: 9 }, card: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.surface, padding: 13, borderRadius: 16, borderWidth: 1, borderColor: colors.border },
-  cardPacked: { opacity: 0.63 }, checkbox: { width: 27, height: 27, borderRadius: 9, borderWidth: 2, borderColor: '#AEB8B1', alignItems: 'center', justifyContent: 'center', marginRight: 12 }, checkboxActive: { backgroundColor: colors.primary, borderColor: colors.primary }, check: { color: '#FFFFFF', fontWeight: '900' },
-  cardBody: { flex: 1 }, itemName: { color: colors.ink, fontSize: 16, fontWeight: '700' }, strike: { textDecorationLine: 'line-through' }, metaRow: { flexDirection: 'row', alignItems: 'center', marginTop: 6, gap: 5 }, dot: { width: 8, height: 8, borderRadius: 4 }, meta: { color: colors.muted, fontSize: 11 }, buyBadge: { backgroundColor: '#F6E8D8', color: colors.shopping, fontSize: 10, fontWeight: '800', paddingHorizontal: 7, paddingVertical: 2, borderRadius: 999 },
-  iconButton: { padding: 6 }, icon: { color: colors.primary, fontSize: 21 }, deleteIcon: { color: '#9B6A6A', fontSize: 24 }, empty: { alignItems: 'center', paddingTop: 60 }, emptyIcon: { width: 50, height: 50, borderRadius: 25, backgroundColor: colors.primarySoft, color: colors.primary, fontSize: 30, textAlign: 'center', lineHeight: 48 }, emptyText: { color: colors.muted, marginTop: 12 }
+  cardPacked: { opacity: 0.63 }, checkbox: { width: 27, height: 27, borderRadius: 9, borderWidth: 2, borderColor: colors.checkbox, alignItems: 'center', justifyContent: 'center', marginRight: 12 }, checkboxActive: { backgroundColor: colors.primary, borderColor: colors.primary }, check: { color: colors.onPrimary, fontWeight: '900' },
+  cardBody: { flex: 1 }, itemName: { color: colors.ink, fontSize: 16, fontWeight: '700' }, strike: { textDecorationLine: 'line-through' }, metaRow: { flexDirection: 'row', alignItems: 'center', marginTop: 6, gap: 5 }, dot: { width: 8, height: 8, borderRadius: 4 }, meta: { color: colors.muted, fontSize: 11 }, buyBadge: { backgroundColor: colors.shoppingSoft, color: colors.shopping, fontSize: 10, fontWeight: '800', paddingHorizontal: 7, paddingVertical: 2, borderRadius: 999 },
+  iconButton: { padding: 6 }, icon: { color: colors.primary, fontSize: 21 }, deleteIcon: { color: colors.destructiveMuted, fontSize: 24 }, empty: { alignItems: 'center', paddingTop: 60 }, emptyIcon: { width: 50, height: 50, borderRadius: 25, backgroundColor: colors.primarySoft, color: colors.primary, fontSize: 30, textAlign: 'center', lineHeight: 48 }, emptyText: { color: colors.muted, marginTop: 12 }
 });

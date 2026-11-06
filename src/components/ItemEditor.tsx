@@ -4,13 +4,16 @@ import { PackingItem } from '../domain/types';
 import { safeQuantity } from '../domain/packing';
 import { useAppData } from '../data/AppDataContext';
 import { translate } from '../i18n/translations';
-import { colors } from '../theme';
+import { useTheme } from '../ThemeContext';
+import { ThemeColors } from '../theme';
 import { Chip } from './Chip';
 
 const newId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
 
 export function ItemEditor({ item, visible, onClose }: { item?: PackingItem; visible: boolean; onClose: () => void }) {
   const { data, saveItem } = useAppData();
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const t = (key: Parameters<typeof translate>[1]) => translate(data.language, key);
   const [name, setName] = useState(item?.name ?? '');
   const [quantity, setQuantity] = useState(String(item?.quantity ?? 1));
@@ -34,7 +37,7 @@ export function ItemEditor({ item, visible, onClose }: { item?: PackingItem; vis
           <Text style={styles.title}>{item ? t('editItem') : t('addItem')}</Text>
           <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.form}>
             <Text style={styles.label}>{t('name')}</Text>
-            <TextInput autoFocus style={styles.input} value={name} onChangeText={setName} placeholder="z. B. Wanderschuhe" placeholderTextColor="#98A29B" />
+            <TextInput autoFocus style={styles.input} value={name} onChangeText={setName} placeholder="z. B. Wanderschuhe" placeholderTextColor={colors.placeholder} />
             <Text style={styles.label}>{t('quantity')}</Text>
             <TextInput style={styles.input} value={quantity} onChangeText={setQuantity} keyboardType="number-pad" />
             <View style={styles.switchRow}><Text style={styles.switchLabel}>{t('owned')}</Text><Switch value={owned} onValueChange={setOwned} trackColor={{ true: colors.primary }} /></View>
@@ -55,10 +58,10 @@ export function ItemEditor({ item, visible, onClose }: { item?: PackingItem; vis
   );
 }
 
-const styles = StyleSheet.create({
-  backdrop: { flex: 1, backgroundColor: 'rgba(15,25,18,0.35)', justifyContent: 'flex-end' },
+const createStyles = (colors: ThemeColors) => StyleSheet.create({
+  backdrop: { flex: 1, backgroundColor: colors.scrim, justifyContent: 'flex-end' },
   sheet: { backgroundColor: colors.background, borderTopLeftRadius: 24, borderTopRightRadius: 24, maxHeight: '92%', paddingTop: 10 },
-  handle: { width: 42, height: 4, borderRadius: 2, backgroundColor: '#B9C0BA', alignSelf: 'center', marginBottom: 12 },
+  handle: { width: 42, height: 4, borderRadius: 2, backgroundColor: colors.handle, alignSelf: 'center', marginBottom: 12 },
   title: { fontSize: 22, fontWeight: '800', color: colors.ink, paddingHorizontal: 20, marginBottom: 8 },
   form: { padding: 20, paddingTop: 8, gap: 10 },
   label: { color: colors.muted, fontWeight: '700', fontSize: 13, marginTop: 5 },
@@ -70,5 +73,5 @@ const styles = StyleSheet.create({
   actions: { flexDirection: 'row', gap: 10, padding: 16, borderTopWidth: 1, borderTopColor: colors.border, backgroundColor: colors.surface },
   primary: { flex: 1, backgroundColor: colors.primary, padding: 14, borderRadius: 12, alignItems: 'center' },
   secondary: { flex: 1, padding: 14, borderRadius: 12, alignItems: 'center' },
-  primaryText: { color: '#FFFFFF', fontWeight: '800' }, secondaryText: { color: colors.ink, fontWeight: '700' }, disabled: { opacity: 0.4 }
+  primaryText: { color: colors.onPrimary, fontWeight: '800' }, secondaryText: { color: colors.ink, fontWeight: '700' }, disabled: { opacity: 0.4 }
 });
