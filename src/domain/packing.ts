@@ -1,6 +1,8 @@
 import { AppData, Filter, PackingItem, TravelPhase } from './types';
 
 export function phaseDays(phase: TravelPhase): number {
+  if (phase.durationDays !== undefined) return Math.max(0, Math.floor(phase.durationDays));
+  if (!phase.startDate || !phase.endDate) return 0;
   const start = Date.parse(phase.startDate);
   const end = Date.parse(phase.endDate);
   if (!Number.isFinite(start) || !Number.isFinite(end) || end < start) return 0;

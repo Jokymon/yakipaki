@@ -48,7 +48,7 @@ Keep business rules in `src/domain`, persistence mutations in `src/data`, and sc
 
 - Treat `AppData`, `PackingItem`, `Category`, `TravelPhase`, and `TravelCollection` as domain contracts.
 - IDs are opaque strings. Never derive identity from a user-visible name.
-- Dates are local calendar dates encoded as `YYYY-MM-DD`. A phase includes both its start and end day.
+- A travel phase uses either a local `YYYY-MM-DD` start/end date range or a positive integer `durationDays`, never both. A date range includes both its start and end day.
 - Deleting a category or phase must remove its ID from every affected item.
 - Deleting a travel group must preserve its phases and only clear their `collectionId`.
 - Persist immutable state updates; do not mutate arrays or domain objects in place.

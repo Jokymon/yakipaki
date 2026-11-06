@@ -14,8 +14,9 @@ export type TravelCollection = {
 export type TravelPhase = {
   id: string;
   name: string;
-  startDate: string;
-  endDate: string;
+  startDate?: string;
+  endDate?: string;
+  durationDays?: number;
   collectionId?: string;
 };
 

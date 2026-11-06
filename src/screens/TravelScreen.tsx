@@ -19,6 +19,8 @@ export function TravelScreen() {
   const [phase, setPhase] = useState('');
   const [start, setStart] = useState('');
   const [end, setEnd] = useState('');
+  const [timingMode, setTimingMode] = useState<'dates' | 'duration'>('dates');
+  const [duration, setDuration] = useState('1');
   const [collectionId, setCollectionId] = useState<string | undefined>();
   const [editingPhaseId, setEditingPhaseId] = useState<string | null>(null);
 
@@ -37,13 +39,23 @@ export function TravelScreen() {
     setCollection(value.name);
   };
 
-  const resetPhase = () => { setPhase(''); setStart(''); setEnd(''); setCollectionId(undefined); setEditingPhaseId(null); };
+  const resetPhase = () => { setPhase(''); setStart(''); setEnd(''); setTimingMode('dates'); setDuration('1'); setCollectionId(undefined); setEditingPhaseId(null); };
   const savePhase = () => {
-    if (!phase.trim() || !/^\d{4}-\d{2}-\d{2}$/.test(start) || !/^\d{4}-\d{2}-\d{2}$/.test(end) || Date.parse(end) < Date.parse(start)) {
+    if (!phase.trim()) return;
+    const durationDays = Number(duration);
+    if (timingMode === 'duration' && (!Number.isInteger(durationDays) || durationDays < 1)) {
+      Alert.alert(t('invalidDuration'));
+      return;
+    }
+    const startTime = Date.parse(start);
+    const endTime = Date.parse(end);
+    if (timingMode === 'dates' && (!/^\d{4}-\d{2}-\d{2}$/.test(start) || !/^\d{4}-\d{2}-\d{2}$/.test(end) || !Number.isFinite(startTime) || !Number.isFinite(endTime) || endTime < startTime)) {
       Alert.alert(t('invalidDates'));
       return;
     }
-    const value = { id: editingPhaseId ?? id(), name: phase.trim(), startDate: start, endDate: end, collectionId };
+    const value = timingMode === 'duration'
+      ? { id: editingPhaseId ?? id(), name: phase.trim(), durationDays, collectionId }
+      : { id: editingPhaseId ?? id(), name: phase.trim(), startDate: start, endDate: end, collectionId };
     if (editingPhaseId) store.updatePhase(value); else store.addPhase(value);
     resetPhase();
   };
@@ -53,8 +65,10 @@ export function TravelScreen() {
     if (!value) return;
     setEditingPhaseId(value.id);
     setPhase(value.name);
-    setStart(value.startDate);
-    setEnd(value.endDate);
+    setStart(value.startDate ?? '');
+    setEnd(value.endDate ?? '');
+    setTimingMode(value.durationDays !== undefined ? 'duration' : 'dates');
+    setDuration(String(value.durationDays ?? 1));
     setCollectionId(value.collectionId);
   };
 
@@ -75,7 +89,7 @@ export function TravelScreen() {
           <EntityRow
             key={value.id}
             title={value.name}
-            detail={`${value.startDate} → ${value.endDate}${value.collectionId ? ` · ${data.collections.find((candidate) => candidate.id === value.collectionId)?.name ?? ''}` : ''}`}
+            detail={`${value.durationDays !== undefined ? `${value.durationDays} ${t('days')}` : `${value.startDate ?? '—'} → ${value.endDate ?? '—'}`}${value.collectionId ? ` · ${data.collections.find((candidate) => candidate.id === value.collectionId)?.name ?? ''}` : ''}`}
             onEdit={() => editPhase(value.id)}
             onDelete={() => { store.deletePhase(value.id); if (editingPhaseId === value.id) resetPhase(); }}
             editLabel={t('edit')}
@@ -84,10 +98,19 @@ export function TravelScreen() {
         ))}
         <View style={styles.phaseForm}>
           <TextInput style={styles.input} value={phase} onChangeText={setPhase} placeholder={t('name')} placeholderTextColor={colors.placeholder} />
-          <View style={styles.dateRow}>
-            <TextInput style={[styles.input, styles.half]} value={start} onChangeText={setStart} placeholder={t('startDate')} placeholderTextColor={colors.placeholder} />
-            <TextInput style={[styles.input, styles.half]} value={end} onChangeText={setEnd} placeholder={t('endDate')} placeholderTextColor={colors.placeholder} />
+          <Text style={styles.smallLabel}>{t('duration')}</Text>
+          <View style={styles.wrap}>
+            <Chip label={t('dateRange')} selected={timingMode === 'dates'} onPress={() => setTimingMode('dates')} />
+            <Chip label={t('durationDays')} selected={timingMode === 'duration'} onPress={() => setTimingMode('duration')} />
           </View>
+          {timingMode === 'dates' ? (
+            <View style={styles.dateRow}>
+              <TextInput style={[styles.input, styles.half]} value={start} onChangeText={setStart} placeholder={t('startDate')} placeholderTextColor={colors.placeholder} />
+              <TextInput style={[styles.input, styles.half]} value={end} onChangeText={setEnd} placeholder={t('endDate')} placeholderTextColor={colors.placeholder} />
+            </View>
+          ) : (
+            <TextInput style={styles.input} value={duration} onChangeText={setDuration} placeholder={t('durationDays')} placeholderTextColor={colors.placeholder} keyboardType="number-pad" />
+          )}
           <Text style={styles.smallLabel}>{t('collection')}</Text>
           <View style={styles.wrap}>
             <Chip label={t('ungrouped')} selected={!collectionId} onPress={() => setCollectionId(undefined)} />
