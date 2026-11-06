@@ -1,0 +1,16 @@
+{
+  "expo": {
+    "name": "Pakipaki",
+    "slug": "pakipaki",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "android": {
+      "package": "ch.pakipaki.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#E9F5EC"
+      }
+    },
+    "plugins": ["expo-sqlite"]
+  }
+}

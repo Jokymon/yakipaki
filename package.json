@@ -1,0 +1,29 @@
+{
+  "name": "pakipaki",
+  "version": "0.1.0",
+  "private": true,
+  "main": "node_modules/expo/AppEntry.js",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "typecheck": "tsc --noEmit",
+    "doctor": "expo-doctor",
+    "bundle:android": "expo export --platform android --output-dir dist",
+    "check": "npm run typecheck && npm run doctor"
+  },
+  "dependencies": {
+    "expo": "~58.0.0",
+    "expo-sqlite": "~58.0.15",
+    "expo-status-bar": "~58.0.0",
+    "react": "19.3.0",
+    "react-native": "0.88.1"
+  },
+  "devDependencies": {
+    "@types/react": "~19.3.0",
+    "expo-doctor": "^1.18.0",
+    "typescript": "~6.0.3"
+  }
+}

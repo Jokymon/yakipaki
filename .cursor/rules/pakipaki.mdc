@@ -1,0 +1,6 @@
+---
+description: Pakipaki project conventions
+alwaysApply: true
+---
+
+Read and follow the root `AGENTS.md`. It is the authoritative guide for product scope, Expo/React Native architecture, local persistence, localization, workflow, and validation. Do not duplicate or override it here.
