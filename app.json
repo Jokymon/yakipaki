@@ -3,12 +3,14 @@
     "name": "Pakipaki",
     "slug": "pakipaki",
     "version": "0.1.0",
+    "icon": "./assets/app-icon.png",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
     "android": {
       "package": "ch.pakipaki.app",
       "adaptiveIcon": {
-        "backgroundColor": "#E9F5EC"
+        "foregroundImage": "./assets/app-icon.png",
+        "backgroundColor": "#FFF4DF"
       }
     },
     "plugins": ["expo-sqlite"]

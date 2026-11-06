@@ -2,6 +2,8 @@
 
 Android-first packing-list MVP built with Expo, React Native, TypeScript, and local SQLite storage.
 
+The launcher icon is stored at [`assets/app-icon.png`](assets/app-icon.png) and configured through `app.json` for standard and Android adaptive icons.
+
 ## Run it
 
 ```powershell
