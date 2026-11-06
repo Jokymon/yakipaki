@@ -15,15 +15,26 @@ export function CategoriesScreen() {
   const styles = createStyles(colors);
   const t = (key: Parameters<typeof translate>[1]) => translate(data.language, key);
   const [category, setCategory] = useState('');
+  const [categoryColor, setCategoryColor] = useState(categoryColors[data.categories.length % categoryColors.length] ?? '#55866A');
+  const [editingId, setEditingId] = useState<string | null>(null);
 
-  const addCategory = () => {
-    if (!category.trim()) return;
-    store.addCategory({
-      id: id(),
-      name: category.trim(),
-      color: categoryColors[data.categories.length % categoryColors.length] ?? '#55866A'
-    });
+  const resetForm = () => {
     setCategory('');
+    setEditingId(null);
+    setCategoryColor(categoryColors[(data.categories.length + 1) % categoryColors.length] ?? '#55866A');
+  };
+  const saveCategory = () => {
+    if (!category.trim()) return;
+    const value = { id: editingId ?? id(), name: category.trim(), color: categoryColor };
+    if (editingId) store.updateCategory(value); else store.addCategory(value);
+    resetForm();
+  };
+  const editCategory = (categoryId: string) => {
+    const value = data.categories.find((candidate) => candidate.id === categoryId);
+    if (!value) return;
+    setEditingId(value.id);
+    setCategory(value.name);
+    setCategoryColor(value.color);
   };
 
   return (
@@ -44,9 +55,22 @@ export function CategoriesScreen() {
               <Text style={styles.entityTitle}>{value.name}</Text>
               <Text style={styles.detail}>{data.items.filter((item) => item.categoryIds.includes(value.id)).length} {t('objects').toLowerCase()}</Text>
             </View>
-            <Pressable hitSlop={8} onPress={() => store.deleteCategory(value.id)}><Text style={styles.remove}>×</Text></Pressable>
+            <Pressable accessibilityLabel={`${t('edit')}: ${value.name}`} hitSlop={8} onPress={() => editCategory(value.id)}><Text style={styles.edit}>✎</Text></Pressable>
+            <Pressable hitSlop={8} onPress={() => { store.deleteCategory(value.id); if (editingId === value.id) resetForm(); }}><Text style={styles.remove}>×</Text></Pressable>
           </View>
         ))}
+        <Text style={styles.formLabel}>{t('color')}</Text>
+        <View style={styles.palette}>
+          {categoryColors.map((value) => (
+            <Pressable
+              key={value}
+              accessibilityRole="radio"
+              accessibilityState={{ selected: categoryColor === value }}
+              onPress={() => setCategoryColor(value)}
+              style={[styles.swatchOuter, categoryColor === value && styles.swatchSelected]}
+            ><View style={[styles.swatch, { backgroundColor: value }]} /></Pressable>
+          ))}
+        </View>
         <View style={styles.addRow}>
           <TextInput
             style={[styles.input, styles.flex]}
@@ -54,10 +78,11 @@ export function CategoriesScreen() {
             onChangeText={setCategory}
             placeholder={t('name')}
             placeholderTextColor={colors.placeholder}
-            onSubmitEditing={addCategory}
+            onSubmitEditing={saveCategory}
           />
-          <Pressable style={styles.addButton} onPress={addCategory}><Text style={styles.addText}>{t('add')}</Text></Pressable>
+          <Pressable style={styles.addButton} onPress={saveCategory}><Text style={styles.addText}>{editingId ? t('save') : t('add')}</Text></Pressable>
         </View>
+        {editingId && <Pressable style={styles.cancelButton} onPress={resetForm}><Text style={styles.cancelText}>{t('cancel')}</Text></Pressable>}
       </View>
     </ScrollView>
   );
@@ -76,10 +101,18 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
   entityText: { flex: 1 },
   entityTitle: { color: colors.ink, fontSize: 15, fontWeight: '700' },
   detail: { color: colors.muted, fontSize: 11, marginTop: 2 },
+  edit: { color: colors.primary, fontSize: 21, paddingHorizontal: 7 },
   remove: { color: colors.destructiveMuted, fontSize: 24, paddingHorizontal: 6 },
+  formLabel: { color: colors.muted, fontSize: 11, fontWeight: '700', marginTop: 4 },
+  palette: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  swatchOuter: { width: 32, height: 32, borderRadius: 16, padding: 4, borderWidth: 2, borderColor: 'transparent' },
+  swatchSelected: { borderColor: colors.ink },
+  swatch: { flex: 1, borderRadius: 12 },
   addRow: { flexDirection: 'row', gap: 8, marginTop: 5 },
   input: { backgroundColor: colors.field, borderWidth: 1, borderColor: colors.border, borderRadius: 10, paddingHorizontal: 11, minHeight: 43, color: colors.ink },
   flex: { flex: 1 },
   addButton: { backgroundColor: colors.primary, borderRadius: 10, justifyContent: 'center', paddingHorizontal: 15 },
-  addText: { color: colors.onPrimary, fontWeight: '800' }
+  addText: { color: colors.onPrimary, fontWeight: '800' },
+  cancelButton: { alignSelf: 'center', padding: 7 },
+  cancelText: { color: colors.muted, fontWeight: '700' }
 });

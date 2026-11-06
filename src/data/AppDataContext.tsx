@@ -12,10 +12,13 @@ type DataContextValue = {
   saveItem: (item: PackingItem) => void;
   deleteItem: (id: string) => void;
   addCategory: (category: Category) => void;
+  updateCategory: (category: Category) => void;
   deleteCategory: (id: string) => void;
   addPhase: (phase: TravelPhase) => void;
+  updatePhase: (phase: TravelPhase) => void;
   deletePhase: (id: string) => void;
   addCollection: (collection: TravelCollection) => void;
+  updateCollection: (collection: TravelCollection) => void;
   deleteCollection: (id: string) => void;
 };
 
@@ -51,18 +54,21 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     })),
     deleteItem: (id) => update((current) => ({ ...current, items: current.items.filter((item) => item.id !== id) })),
     addCategory: (category) => update((current) => ({ ...current, categories: [...current.categories, category] })),
+    updateCategory: (category) => update((current) => ({ ...current, categories: current.categories.map((candidate) => candidate.id === category.id ? category : candidate) })),
     deleteCategory: (id) => update((current) => ({
       ...current,
       categories: current.categories.filter((category) => category.id !== id),
       items: current.items.map((item) => ({ ...item, categoryIds: item.categoryIds.filter((categoryId) => categoryId !== id) }))
     })),
     addPhase: (phase) => update((current) => ({ ...current, phases: [...current.phases, phase] })),
+    updatePhase: (phase) => update((current) => ({ ...current, phases: current.phases.map((candidate) => candidate.id === phase.id ? phase : candidate) })),
     deletePhase: (id) => update((current) => ({
       ...current,
       phases: current.phases.filter((phase) => phase.id !== id),
       items: current.items.map((item) => ({ ...item, phaseIds: item.phaseIds.filter((phaseId) => phaseId !== id) }))
     })),
     addCollection: (collection) => update((current) => ({ ...current, collections: [...current.collections, collection] })),
+    updateCollection: (collection) => update((current) => ({ ...current, collections: current.collections.map((candidate) => candidate.id === collection.id ? collection : candidate) })),
     deleteCollection: (id) => update((current) => ({
       ...current,
       collections: current.collections.filter((collection) => collection.id !== id),

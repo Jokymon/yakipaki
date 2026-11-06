@@ -3,7 +3,7 @@ import { Language } from '../domain/types';
 const messages = {
   de: {
     title: 'Meine Packliste', items: 'Packen', shopping: 'Einkaufen', manage: 'Organisieren', travel: 'Reise', all: 'Alle',
-    addItem: 'Gegenstand hinzufügen', editItem: 'Gegenstand bearbeiten', name: 'Name', quantity: 'Anzahl', notes: 'Notizen',
+    addItem: 'Gegenstand hinzufügen', editItem: 'Gegenstand bearbeiten', name: 'Name', quantity: 'Anzahl', notes: 'Notizen', color: 'Farbe', edit: 'Bearbeiten',
     owned: 'Bereits vorhanden', packed: 'Eingepackt', categories: 'Kategorien', phases: 'Reisephasen', collections: 'Reisegruppen',
     save: 'Speichern', cancel: 'Abbrechen', delete: 'Löschen', empty: 'Hier ist noch nichts.', filters: 'Filter',
     shortUse: 'Unter 5 Tage', singlePhase: 'Nur eine Phase', startDate: 'Start (JJJJ-MM-TT)', endDate: 'Ende (JJJJ-MM-TT)',
@@ -13,7 +13,7 @@ const messages = {
   },
   en: {
     title: 'My packing list', items: 'Pack', shopping: 'Shopping', manage: 'Organize', travel: 'Travel', all: 'All',
-    addItem: 'Add item', editItem: 'Edit item', name: 'Name', quantity: 'Quantity', notes: 'Notes',
+    addItem: 'Add item', editItem: 'Edit item', name: 'Name', quantity: 'Quantity', notes: 'Notes', color: 'Color', edit: 'Edit',
     owned: 'Already owned', packed: 'Packed', categories: 'Categories', phases: 'Travel phases', collections: 'Travel groups',
     save: 'Save', cancel: 'Cancel', delete: 'Delete', empty: 'Nothing here yet.', filters: 'Filters',
     shortUse: 'Under 5 days', singlePhase: 'One phase only', startDate: 'Start (YYYY-MM-DD)', endDate: 'End (YYYY-MM-DD)',
