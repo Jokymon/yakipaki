@@ -9,6 +9,7 @@ Requirements:
 - Node.js 22.13 or newer
 - npm
 - Android device with USB debugging and Expo Go, or an Android emulator
+- JDK 17 and Android SDK Platform 37 when compiling native Android binaries locally
 
 ```powershell
 npm install
