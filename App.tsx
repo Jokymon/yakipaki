@@ -19,9 +19,9 @@ function AppContent() {
       <StatusBar style="dark" />
       <View style={styles.screen}>{tab === 'items' ? <ItemsScreen /> : tab === 'shopping' ? <ItemsScreen shopping /> : <ManageScreen />}</View>
       <View style={styles.nav}>
-        <NavButton icon="✓" label={t('items')} active={tab === 'items'} onPress={() => setTab('items')} />
-        <NavButton icon="◈" label={t('shopping')} active={tab === 'shopping'} onPress={() => setTab('shopping')} badge={data.items.filter((item) => !item.owned).length} />
-        <NavButton icon="⌁" label={t('manage')} active={tab === 'manage'} onPress={() => setTab('manage')} />
+        <NavButton icon="🎒" label={t('items')} active={tab === 'items'} onPress={() => setTab('items')} />
+        <NavButton icon="🛒" label={t('shopping')} active={tab === 'shopping'} onPress={() => setTab('shopping')} badge={data.items.filter((item) => !item.owned).length} />
+        <NavButton icon="✈" label={t('manage')} active={tab === 'manage'} onPress={() => setTab('manage')} />
       </View>
     </SafeAreaView>
   );
