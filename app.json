@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "Pakipaki",
-    "slug": "pakipaki",
+    "name": "Yakipaki",
+    "slug": "yakipaki",
     "version": "0.1.0",
     "icon": "./assets/app-icon.png",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
     "android": {
-      "package": "ch.pakipaki.app",
+      "package": "ch.yakipaki.app",
       "adaptiveIcon": {
         "foregroundImage": "./assets/app-icon.png",
         "backgroundColor": "#FFF4DF"

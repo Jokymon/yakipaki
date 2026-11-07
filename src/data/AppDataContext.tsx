@@ -3,7 +3,7 @@ import React, { createContext, ReactNode, useCallback, useContext, useEffect, us
 import { AppData, Category, Language, PackingItem, TravelCollection, TravelPhase } from '../domain/types';
 import { seedData } from './seed';
 
-const STORAGE_KEY = 'pakipaki.data.v1';
+const STORAGE_KEY = 'yakipaki.data.v1';
 
 type DataContextValue = {
   data: AppData;

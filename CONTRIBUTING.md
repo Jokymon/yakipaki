@@ -1,4 +1,4 @@
-# Contributing to Pakipaki
+# Contributing to Yakipaki
 
 Start with [AGENTS.md](AGENTS.md); it is the canonical architecture and workflow guide for both humans and coding assistants.
 

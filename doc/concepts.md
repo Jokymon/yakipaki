@@ -1,6 +1,6 @@
-# Pakipaki
+# Yakipaki
 
-Pakipaki is an Android mobile app that is supposed to help managing packing lists. The UI should be translatable 
+Yakipaki is an Android mobile app that is supposed to help managing packing lists. The UI should be translatable 
 and one definit support should be in German.
 
 The main functionality is the organisation of items for packing lists. This is the primary view of the app - a 

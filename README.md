@@ -1,4 +1,4 @@
-# Pakipaki
+# Yakipaki
 
 Android-first packing-list MVP built with Expo, React Native, TypeScript, and local SQLite storage.
 
@@ -28,7 +28,7 @@ The `preview` profile in [`eas.json`](eas.json) explicitly produces an APK. When
 
 ```powershell
 adb devices
-adb install -r "C:\path\to\pakipaki.apk"
+adb install -r "C:\path\to\yakipaki.apk"
 ```
 
 The `-r` option replaces an existing installation while retaining its application data. If `adb devices` reports `unauthorized`, unlock the phone and accept its USB-debugging prompt.

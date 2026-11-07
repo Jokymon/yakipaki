@@ -1,10 +1,10 @@
-# Pakipaki agent guide
+# Yakipaki agent guide
 
 This file is the authoritative project guide for coding agents. Tool-specific instruction files should point here instead of duplicating these rules.
 
 ## Product scope
 
-Pakipaki is an Android-first, offline packing-list app. The MVP supports:
+Yakipaki is an Android-first, offline packing-list app. The MVP supports:
 
 - one locally stored packing list per app installation;
 - item creation, editing, deletion, quantities, notes, packed state, and owned state;
@@ -20,7 +20,7 @@ Do not introduce accounts, cloud synchronization, analytics, advertising, or net
 
 - Expo SDK 58, React Native 0.88, and React 19.
 - TypeScript in strict mode; do not weaken compiler settings to hide errors.
-- `expo-sqlite/kv-store` for on-device persistence. The key `pakipaki.data.v1` is a persisted schema contract.
+- `expo-sqlite/kv-store` for on-device persistence. The key `yakipaki.data.v1` is a persisted schema contract.
 - Plain React context and hooks for current state management.
 - React Native `StyleSheet`, `ThemeProvider`, and the paired palettes in `src/theme.ts` for presentation. The app follows the device color scheme; UI code must use `useTheme()` rather than importing a fixed palette.
 - No navigation framework in the MVP; `App.tsx` owns the four-tab shell for packing, shopping, categories, and travel.
@@ -55,7 +55,7 @@ Keep business rules in `src/domain`, persistence mutations in `src/data`, and sc
 - Any incompatible persisted-data change requires a new storage version and an explicit migration. Never silently discard existing user data.
 - All product data stays local. Do not log item names, notes, itinerary details, or stored JSON.
 
-The current `kv-store` document is appropriate for the MVP. Move to relational SQLite tables only when query volume or migrations justify it, and preserve a migration path from `pakipaki.data.v1`.
+The current `kv-store` document is appropriate for the MVP. Move to relational SQLite tables only when query volume or migrations justify it, and preserve a migration path from `yakipaki.data.v1`.
 
 ## UI and localization conventions
 
