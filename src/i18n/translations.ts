@@ -9,7 +9,7 @@ const messages = {
     shortUse: 'Unter 5 Tage', singlePhase: 'Nur eine Phase', startDate: 'Start (JJJJ-MM-TT)', endDate: 'Ende (JJJJ-MM-TT)', dateRange: 'Zeitraum', duration: 'Dauer', durationDays: 'Dauer in Tagen', days: 'Tage',
     add: 'Hinzufügen', language: 'Sprache', objects: 'Gegenstände', notOwned: 'Noch zu besorgen', packedCount: 'eingepackt', resetFilters: 'Filter zurücksetzen',
     collection: 'Reisegruppe (optional)', ungrouped: 'Keine Reisegruppe', invalidDates: 'Bitte gültige Daten im Format JJJJ-MM-TT eingeben.', invalidDuration: 'Bitte eine Dauer von mindestens einem ganzen Tag eingeben.',
-    confirmDelete: 'Wirklich löschen?', deleteItemText: 'Dieser Gegenstand wird aus deiner Packliste entfernt.', usage: 'Nutzung'
+    confirmDelete: 'Wirklich löschen?', deleteItemText: 'Dieser Gegenstand wird aus deiner Packliste entfernt.', usage: 'Nutzung', storageError: 'Lokale Daten konnten nicht sicher gelesen oder gespeichert werden. Änderungen sind möglicherweise nicht dauerhaft.'
   },
   en: {
     title: 'My packing list', items: 'Pack', shopping: 'Shopping', manage: 'Organize', travel: 'Travel', all: 'All',
@@ -19,7 +19,7 @@ const messages = {
     shortUse: 'Under 5 days', singlePhase: 'One phase only', startDate: 'Start (YYYY-MM-DD)', endDate: 'End (YYYY-MM-DD)', dateRange: 'Date range', duration: 'Duration', durationDays: 'Duration in days', days: 'days',
     add: 'Add', language: 'Language', objects: 'items', notOwned: 'Still to buy', packedCount: 'packed', resetFilters: 'Reset filters',
     collection: 'Travel group (optional)', ungrouped: 'No travel group', invalidDates: 'Enter valid dates in YYYY-MM-DD format.', invalidDuration: 'Enter a duration of at least one whole day.',
-    confirmDelete: 'Delete this item?', deleteItemText: 'This item will be removed from your packing list.', usage: 'Usage'
+    confirmDelete: 'Delete this item?', deleteItemText: 'This item will be removed from your packing list.', usage: 'Usage', storageError: 'Local data could not be read or saved safely. Changes may not be persistent.'
   }
 } as const;
 

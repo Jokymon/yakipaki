@@ -9,10 +9,11 @@
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
+    "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test tests/*.test.mts",
     "typecheck": "tsc --noEmit",
     "doctor": "expo-doctor",
     "bundle:android": "expo export --platform android --output-dir dist",
-    "check": "npm run typecheck && npm run doctor"
+    "check": "npm run test && npm run typecheck && npm run doctor"
   },
   "dependencies": {
     "expo": "~58.0.0",

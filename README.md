@@ -76,6 +76,25 @@ npx eas-cli@latest build --platform android --profile production
 
 See Expo's documentation for [installable APK builds](https://docs.expo.dev/build-reference/apk/) and [signed local release builds](https://docs.expo.dev/guides/local-app-production/) when configuring production signing or store submission.
 
+### Updating tester installations without losing data
+
+Distribute tester APKs using the EAS `preview` profile consistently:
+
+```powershell
+npx eas-cli@latest build --platform android --profile preview
+```
+
+The configuration uses EAS-managed remote version codes and increments them for every preview build. Android will retain the app's local data when testers install the newer APK over the previous version, provided that all of the following remain true:
+
+- the Android package stays `ch.yakipaki.app`;
+- builds use the same EAS-managed signing key;
+- the new build has a higher Android version code;
+- persisted-data changes remain compatible or include a schema migration.
+
+Do not alternate between locally signed APKs and EAS-signed APKs for the same tester installation. Keep a secure backup of the EAS Android credentials using `eas credentials`; never commit downloaded credentials or keystores.
+
+Yakipaki stores a versioned document under the permanent local key `yakipaki.data`. The current schema version is tested automatically. See [`doc/data-migrations.md`](doc/data-migrations.md) before changing domain or persistence types.
+
 ## Included in the MVP
 
 - Create, edit, delete, pack, and persist packing items locally

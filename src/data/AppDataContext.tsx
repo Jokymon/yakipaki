@@ -1,13 +1,12 @@
-import Storage from 'expo-sqlite/kv-store';
-import React, { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import React, { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { AppData, Category, Language, PackingItem, TravelCollection, TravelPhase } from '../domain/types';
 import { seedData } from './seed';
-
-const STORAGE_KEY = 'yakipaki.data.v1';
+import { loadAppData, saveAppData } from './persistence';
 
 type DataContextValue = {
   data: AppData;
   ready: boolean;
+  storageError: boolean;
   setLanguage: (language: Language) => void;
   saveItem: (item: PackingItem) => void;
   deleteItem: (id: string) => void;
@@ -27,24 +26,33 @@ const DataContext = createContext<DataContextValue | null>(null);
 export function AppDataProvider({ children }: { children: ReactNode }) {
   const [data, setData] = useState<AppData>(seedData);
   const [ready, setReady] = useState(false);
+  const [canPersist, setCanPersist] = useState(false);
+  const [storageError, setStorageError] = useState(false);
+  const writeQueue = useRef<Promise<void>>(Promise.resolve());
 
   useEffect(() => {
-    Storage.getItem(STORAGE_KEY)
+    loadAppData()
       .then((stored) => {
-        if (stored) setData(JSON.parse(stored) as AppData);
+        setData(stored);
+        setCanPersist(true);
       })
-      .catch(() => undefined)
+      .catch(() => setStorageError(true))
       .finally(() => setReady(true));
   }, []);
 
   useEffect(() => {
-    if (ready) Storage.setItem(STORAGE_KEY, JSON.stringify(data)).catch(() => undefined);
-  }, [data, ready]);
+    if (!canPersist) return;
+    writeQueue.current = writeQueue.current
+      .then(() => saveAppData(data))
+      .then(() => setStorageError(false))
+      .catch(() => setStorageError(true));
+  }, [canPersist, data]);
 
   const update = useCallback((recipe: (current: AppData) => AppData) => setData(recipe), []);
   const value = useMemo<DataContextValue>(() => ({
     data,
     ready,
+    storageError,
     setLanguage: (language) => update((current) => ({ ...current, language })),
     saveItem: (item) => update((current) => ({
       ...current,
@@ -74,7 +82,7 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
       collections: current.collections.filter((collection) => collection.id !== id),
       phases: current.phases.map((phase) => phase.collectionId === id ? { ...phase, collectionId: undefined } : phase)
     }))
-  }), [data, ready, update]);
+  }), [data, ready, storageError, update]);
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 }

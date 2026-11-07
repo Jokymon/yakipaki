@@ -20,7 +20,7 @@ Do not introduce accounts, cloud synchronization, analytics, advertising, or net
 
 - Expo SDK 58, React Native 0.88, and React 19.
 - TypeScript in strict mode; do not weaken compiler settings to hide errors.
-- `expo-sqlite/kv-store` for on-device persistence. The key `yakipaki.data.v1` is a persisted schema contract.
+- `expo-sqlite/kv-store` for on-device persistence. The permanent key `yakipaki.data` contains a versioned envelope managed by `src/data/schema.ts`.
 - Plain React context and hooks for current state management.
 - React Native `StyleSheet`, `ThemeProvider`, and the paired palettes in `src/theme.ts` for presentation. The app follows the device color scheme; UI code must use `useTheme()` rather than importing a fixed palette.
 - No navigation framework in the MVP; `App.tsx` owns the four-tab shell for packing, shopping, categories, and travel.
@@ -52,10 +52,10 @@ Keep business rules in `src/domain`, persistence mutations in `src/data`, and sc
 - Deleting a category or phase must remove its ID from every affected item.
 - Deleting a travel group must preserve its phases and only clear their `collectionId`.
 - Persist immutable state updates; do not mutate arrays or domain objects in place.
-- Any incompatible persisted-data change requires a new storage version and an explicit migration. Never silently discard existing user data.
+- Any incompatible persisted-data change requires incrementing `CURRENT_SCHEMA_VERSION`, an explicit sequential migration, and a previous-version fixture in `tests/schema.test.mts`. Never change the permanent storage key or silently discard existing user data.
 - All product data stays local. Do not log item names, notes, itinerary details, or stored JSON.
 
-The current `kv-store` document is appropriate for the MVP. Move to relational SQLite tables only when query volume or migrations justify it, and preserve a migration path from `yakipaki.data.v1`.
+The current `kv-store` document is appropriate for the MVP. Move to relational SQLite tables only when query volume or migrations justify it, and preserve a migration path from every released schema. See `doc/data-migrations.md`.
 
 ## UI and localization conventions
 
@@ -84,11 +84,13 @@ While editing:
 
 Before handing off:
 
-1. Run `npm run typecheck`.
-2. Run `npm run doctor` when dependencies or Expo configuration changed. It requires internet access.
-3. Run `npm run bundle:android` for application or build-configuration changes.
-4. When a device is available, run `npm run android` and exercise the changed flow in Expo Go.
-5. Report which checks ran and any check that could not run.
+1. Run `npm run test`.
+2. Run `npm run typecheck`.
+3. Run `npm run doctor` when dependencies or Expo configuration changed. It requires internet access.
+4. Run `npm run bundle:android` for application or build-configuration changes.
+5. When a device is available, run `npm run android` and exercise the changed flow in Expo Go.
+6. For persistence changes, install the new APK over a populated previous APK and verify the migrated values.
+7. Report which checks ran and any check that could not run.
 
 Do not use `npm audit fix --force` or perform broad dependency upgrades as an incidental fix. Review security findings in the context of Expo's required dependency versions.
 

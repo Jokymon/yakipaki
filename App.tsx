@@ -12,7 +12,7 @@ import { ThemeColors } from './src/theme';
 type Tab = 'items' | 'shopping' | 'categories' | 'travel';
 
 function AppContent() {
-  const { data, ready } = useAppData();
+  const { data, ready, storageError } = useAppData();
   const { colors, isDark } = useTheme();
   const styles = createStyles(colors);
   const [tab, setTab] = useState<Tab>('items');
@@ -21,6 +21,7 @@ function AppContent() {
   return (
     <View style={styles.safe}>
       <StatusBar style={isDark ? 'light' : 'dark'} />
+      {storageError && <View style={styles.storageBanner}><Text style={styles.storageBannerText}>{t('storageError')}</Text></View>}
       <View style={styles.screen}>{tab === 'items' ? <ItemsScreen /> : tab === 'shopping' ? <ItemsScreen shopping /> : tab === 'categories' ? <CategoriesScreen /> : <TravelScreen />}</View>
       <View style={styles.nav}>
         <NavButton icon="🎒" label={t('items')} active={tab === 'items'} onPress={() => setTab('items')} />
@@ -42,5 +43,6 @@ export default function App() { return <ThemeProvider><AppDataProvider><AppConte
 
 const createStyles = (colors: ThemeColors) => StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.background, paddingTop: NativeStatusBar.currentHeight ?? 0 }, screen: { flex: 1 }, loading: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.background },
+  storageBanner: { backgroundColor: colors.shoppingSoft, borderBottomWidth: 1, borderBottomColor: colors.shopping, paddingHorizontal: 14, paddingVertical: 8 }, storageBannerText: { color: colors.shopping, fontSize: 12, fontWeight: '700', textAlign: 'center' },
   nav: { position: 'absolute', bottom: 0, left: 0, right: 0, height: 78, flexDirection: 'row', backgroundColor: colors.nav, borderTopWidth: 1, borderTopColor: colors.border, paddingBottom: 7 }, navButton: { flex: 1, alignItems: 'center', justifyContent: 'center' }, navIcon: { fontSize: 22, color: colors.inactive, textAlign: 'center' }, navLabel: { fontSize: 11, fontWeight: '700', color: colors.inactive, marginTop: 3 }, navActive: { color: colors.primary }, badge: { position: 'absolute', top: -4, right: -13, backgroundColor: colors.accent, color: '#18261E', borderRadius: 10, minWidth: 18, height: 18, lineHeight: 18, textAlign: 'center', fontSize: 10, fontWeight: '900' }
 });
