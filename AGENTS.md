@@ -90,7 +90,8 @@ Before handing off:
 4. Run `npm run bundle:android` for application or build-configuration changes.
 5. When a device is available, run `npm run android` and exercise the changed flow in Expo Go.
 6. For persistence changes, install the new APK over a populated previous APK and verify the migrated values.
-7. Report which checks ran and any check that could not run.
+7. Preview APKs are built by `.github/workflows/preview-apk.yml` using the EAS `preview` profile. Do not replace this with per-run debug signing, which would break tester updates.
+8. Report which checks ran and any check that could not run.
 
 Do not use `npm audit fix --force` or perform broad dependency upgrades as an incidental fix. Review security findings in the context of Expo's required dependency versions.
 

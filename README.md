@@ -95,6 +95,32 @@ Do not alternate between locally signed APKs and EAS-signed APKs for the same te
 
 Yakipaki stores a versioned document under the permanent local key `yakipaki.data`. The current schema version is tested automatically. See [`doc/data-migrations.md`](doc/data-migrations.md) before changing domain or persistence types.
 
+### GitHub Actions preview APK
+
+The [`Build preview APK`](.github/workflows/preview-apk.yml) workflow validates the project, creates a signed EAS preview build, downloads the APK, and attaches it to the GitHub Actions run for 30 days. It runs:
+
+- manually through **Actions → Build preview APK → Run workflow**; or
+- when pushing a tag whose name starts with `preview-`, for example `preview-0.1.0`.
+
+Complete this one-time setup before the first CI build:
+
+1. Link the repository to an Expo project and commit the resulting `extra.eas.projectId` in `app.json`:
+
+   ```powershell
+   npx eas-cli@latest login
+   npx eas-cli@latest init
+   ```
+
+2. Run one interactive preview build locally. This lets EAS create or confirm the Android signing credentials required by later non-interactive builds:
+
+   ```powershell
+   npx eas-cli@latest build --platform android --profile preview
+   ```
+
+3. Create an Expo access token and add it to the GitHub repository under **Settings → Secrets and variables → Actions** as a repository secret named `EXPO_TOKEN`. Never commit the token.
+
+After a successful run, download `yakipaki-preview-<run number>` from the run's **Artifacts** section. The archive contains `yakipaki-preview.apk` and EAS build metadata. Every CI build uses the same package ID, EAS signing credentials, and auto-incremented version code so it can update earlier EAS preview installations without clearing their local data.
+
 ## Included in the MVP
 
 - Create, edit, delete, pack, and persist packing items locally
