@@ -14,6 +14,14 @@
         "backgroundColor": "#FFF4DF"
       }
     },
-    "plugins": ["expo-sqlite"]
+    "plugins": [
+      "expo-sqlite"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "93a08c43-f440-4fb9-af72-215555d0a296"
+      }
+    },
+    "owner": "jokymon"
   }
 }
