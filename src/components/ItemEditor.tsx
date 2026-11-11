@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { KeyboardAvoidingView, Modal, Platform, Pressable, ScrollView, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { PackingItem } from '../domain/types';
 import { safeQuantity } from '../domain/packing';
 import { useAppData } from '../data/AppDataContext';
@@ -13,7 +14,8 @@ const newId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
 export function ItemEditor({ item, visible, onClose }: { item?: PackingItem; visible: boolean; onClose: () => void }) {
   const { data, saveItem } = useAppData();
   const { colors } = useTheme();
-  const styles = createStyles(colors);
+  const { bottom } = useSafeAreaInsets();
+  const styles = createStyles(colors, bottom);
   const t = (key: Parameters<typeof translate>[1]) => translate(data.language, key);
   const [name, setName] = useState(item?.name ?? '');
   const [quantity, setQuantity] = useState(String(item?.quantity ?? 1));
@@ -61,7 +63,7 @@ export function ItemEditor({ item, visible, onClose }: { item?: PackingItem; vis
   );
 }
 
-const createStyles = (colors: ThemeColors) => StyleSheet.create({
+const createStyles = (colors: ThemeColors, bottomInset = 0) => StyleSheet.create({
   backdrop: { flex: 1, backgroundColor: colors.scrim, justifyContent: 'flex-end' },
   sheet: { backgroundColor: colors.background, borderTopLeftRadius: 24, borderTopRightRadius: 24, maxHeight: '92%', paddingTop: 10 },
   handle: { width: 42, height: 4, borderRadius: 2, backgroundColor: colors.handle, alignSelf: 'center', marginBottom: 12 },
@@ -73,7 +75,7 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
   switchRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', backgroundColor: colors.surface, borderRadius: 12, padding: 12 },
   switchLabel: { fontSize: 16, fontWeight: '600', color: colors.ink },
   wrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 7 },
-  actions: { flexDirection: 'row', gap: 10, padding: 16, borderTopWidth: 1, borderTopColor: colors.border, backgroundColor: colors.surface },
+  actions: { flexDirection: 'row', gap: 10, paddingHorizontal: 16, paddingTop: 16, paddingBottom: 16 + bottomInset, borderTopWidth: 1, borderTopColor: colors.border, backgroundColor: colors.surface },
   primary: { flex: 1, backgroundColor: colors.primary, padding: 14, borderRadius: 12, alignItems: 'center' },
   secondary: { flex: 1, padding: 14, borderRadius: 12, alignItems: 'center' },
   primaryText: { color: colors.onPrimary, fontWeight: '800' }, secondaryText: { color: colors.ink, fontWeight: '700' }, disabled: { opacity: 0.4 }

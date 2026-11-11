@@ -61,6 +61,7 @@ The current `kv-store` document is appropriate for the MVP. Move to relational S
 ## UI and localization conventions
 
 - Design for a narrow Android portrait screen first, while retaining normal React Native portability.
+- Use `react-native-safe-area-context` for system insets. Bottom navigation and modal actions must remain above Android's gesture or three-button navigation area.
 - Keep controls touch-friendly and provide accessibility roles/state for interactive semantic controls.
 - Use shared colors from `src/theme.ts`; category colors may come from `categoryColors`.
 - Every user-visible reusable string belongs in both language maps in `src/i18n/translations.ts`.

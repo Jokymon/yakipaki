@@ -129,6 +129,7 @@ After a successful run, download `yakipaki-preview-<run number>` from the run's 
 - Collapsible category groups plus phase, travel-group, short-use, and single-phase filters
 - German and English UI, switched from the Categories screen
 - Automatic light and dark themes following the device setting
+- Safe-area-aware bottom navigation that remains above Android system controls
 - Seed itinerary and items so the first launch is immediately playable
 
 Data is stored only on the device through `expo-sqlite/kv-store`. The current schema is intentionally versioned so it can later migrate to relational SQLite tables without changing the screens.
