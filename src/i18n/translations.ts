@@ -3,7 +3,7 @@ import { Language } from '../domain/types';
 const messages = {
   de: {
     title: 'Meine Packliste', items: 'Packen', shopping: 'Einkaufen', manage: 'Organisieren', travel: 'Reise', all: 'Alle',
-    addItem: 'Gegenstand hinzufügen', editItem: 'Gegenstand bearbeiten', name: 'Name', quantity: 'Anzahl', notes: 'Notizen', color: 'Farbe', edit: 'Bearbeiten',
+    addItem: 'Gegenstand hinzufügen', editItem: 'Gegenstand bearbeiten', name: 'Name', quantity: 'Anzahl', notes: 'Notizen', color: 'Farbe', customColor: 'Eigene Farbe', moreColors: 'Weitere Farben', hexColor: 'Hex-Farbwert', apply: 'Übernehmen', edit: 'Bearbeiten',
     owned: 'Bereits vorhanden', packed: 'Eingepackt', categories: 'Kategorien', phases: 'Reisephasen', collections: 'Reisegruppen',
     save: 'Speichern', cancel: 'Abbrechen', delete: 'Löschen', empty: 'Hier ist noch nichts.', filters: 'Filter',
     shortUse: 'Unter 5 Tage', singlePhase: 'Nur eine Phase', startDate: 'Start (JJJJ-MM-TT)', endDate: 'Ende (JJJJ-MM-TT)', dateRange: 'Zeitraum', duration: 'Dauer', durationDays: 'Dauer in Tagen', days: 'Tage',
@@ -13,7 +13,7 @@ const messages = {
   },
   en: {
     title: 'My packing list', items: 'Pack', shopping: 'Shopping', manage: 'Organize', travel: 'Travel', all: 'All',
-    addItem: 'Add item', editItem: 'Edit item', name: 'Name', quantity: 'Quantity', notes: 'Notes', color: 'Color', edit: 'Edit',
+    addItem: 'Add item', editItem: 'Edit item', name: 'Name', quantity: 'Quantity', notes: 'Notes', color: 'Color', customColor: 'Custom color', moreColors: 'More colors', hexColor: 'Hex color value', apply: 'Apply', edit: 'Edit',
     owned: 'Already owned', packed: 'Packed', categories: 'Categories', phases: 'Travel phases', collections: 'Travel groups',
     save: 'Save', cancel: 'Cancel', delete: 'Delete', empty: 'Nothing here yet.', filters: 'Filters',
     shortUse: 'Under 5 days', singlePhase: 'One phase only', startDate: 'Start (YYYY-MM-DD)', endDate: 'End (YYYY-MM-DD)', dateRange: 'Date range', duration: 'Duration', durationDays: 'Duration in days', days: 'days',
