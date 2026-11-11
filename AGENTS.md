@@ -8,9 +8,9 @@ Yakipaki is an Android-first, offline packing-list app. The MVP supports:
 
 - one locally stored packing list per app installation;
 - item creation, editing, deletion, quantities, notes, packed state, and owned state;
-- user-managed categories, with many categories per item;
+- user-managed categories, with at most one category per item;
 - dated travel phases, optional travel-group membership, and many phases per item;
-- filters for categories, phases, travel groups, usage under five days, and single-phase items;
+- collapsible category groups plus filters for phases, travel groups, usage under five days, and single-phase items;
 - a shopping view for items that are not yet owned;
 - German and English UI, with German as the initial language.
 
@@ -48,6 +48,7 @@ Keep business rules in `src/domain`, persistence mutations in `src/data`, and sc
 
 - Treat `AppData`, `PackingItem`, `Category`, `TravelPhase`, and `TravelCollection` as domain contracts.
 - IDs are opaque strings. Never derive identity from a user-visible name.
+- An item has at most one optional `categoryId`; categories organize collapsible list sections and are not selectable filters.
 - A travel phase uses either a local `YYYY-MM-DD` start/end date range or a positive integer `durationDays`, never both. A date range includes both its start and end day.
 - Deleting a category or phase must remove its ID from every affected item.
 - Deleting a travel group must preserve its phases and only clear their `collectionId`.

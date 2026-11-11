@@ -13,7 +13,8 @@ item editor which can be opened through a pen symbol next to every packing item.
 
 The grouping "category" is just used to categorise items into different types like "Clothing", "Documents" etc.
 These categories are managed by the user. They can add and remove such categories and assign them to packing items 
-("Gegenstände"). An item can be part of multiple categories.
+("Gegenstände"). An item can be assigned to at most one category. Categories group items into individually
+collapsible sections on the packing list.
 
 The grouping "traveling phase" is just to assign items to different phases of a bigger travel. A traveling phase 
 has a name and a date range with a start and end date giving when this phase takes place. There are no 
@@ -23,8 +24,8 @@ Travel phases may additionally be collected into "travelling categories". So for
 collect "Trekking tea houses" and "Trekking camping" under a super category "Trekking". Also there are no 
 restrictions for overlapping or gaps.
 
-On the main screen the user should be provided with the ability to filter their packing list by category and by 
-travelling phase, including the traveling categories. We want to support at least one special filters which could 
+On the main screen the user should be provided with the ability to filter their packing list by travelling phase,
+including the traveling categories. We want to support at least one special filters which could 
 help optimizing the packing list: a list of items that are only used very shortly or never (when they are only 
 assigned to a total of traveling phases of less than maybe 5 days) or items that only belong to one traveling 
 phase.

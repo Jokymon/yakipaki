@@ -20,8 +20,6 @@ export function matchesFilter(item: PackingItem, filter: Filter, data: AppData):
   switch (filter.kind) {
     case 'all':
       return true;
-    case 'category':
-      return item.categoryIds.includes(filter.id);
     case 'phase':
       return item.phaseIds.includes(filter.id);
     case 'collection': {

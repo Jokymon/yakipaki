@@ -26,7 +26,7 @@ export type PackingItem = {
   quantity: number;
   packed: boolean;
   owned: boolean;
-  categoryIds: string[];
+  categoryId?: string;
   phaseIds: string[];
   notes: string;
 };
@@ -41,7 +41,6 @@ export type AppData = {
 
 export type Filter =
   | { kind: 'all' }
-  | { kind: 'category'; id: string }
   | { kind: 'phase'; id: string }
   | { kind: 'collection'; id: string }
   | { kind: 'short-use' }

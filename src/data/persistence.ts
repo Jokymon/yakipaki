@@ -1,7 +1,7 @@
 import Storage from 'expo-sqlite/kv-store';
 import { AppData } from '../domain/types';
 import { seedData } from './seed';
-import { assertAppData, decodeAndMigrate, encodeAppData } from './schema';
+import { decodeAndMigrate, encodeAppData } from './schema';
 
 // This key is permanent. Schema versions belong inside the stored document so
 // every app release can find and migrate data written by older releases.
@@ -14,7 +14,7 @@ export async function loadAppData(): Promise<AppData> {
   // Import builds created before the permanent versioned envelope existed.
   const legacy = await Storage.getItem(LEGACY_V1_KEY);
   if (legacy) {
-    const data = assertAppData(JSON.parse(legacy));
+    const data = decodeAndMigrate(JSON.stringify({ schemaVersion: 1, data: JSON.parse(legacy) }));
     await saveAppData(data);
     return data;
   }

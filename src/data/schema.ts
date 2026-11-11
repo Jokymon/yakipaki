@@ -1,13 +1,28 @@
 import type { AppData, Category, PackingItem, TravelCollection, TravelPhase } from '../domain/types';
 
-export const CURRENT_SCHEMA_VERSION = 1;
+export const CURRENT_SCHEMA_VERSION = 2;
 
 type StoredDocument = { schemaVersion: number; data: unknown };
 type Migration = (data: unknown) => unknown;
 
-// Add migrations by their source version. A future v2 schema would add
-// `1: migrateV1ToV2` here, then increment CURRENT_SCHEMA_VERSION to 2.
-const migrations: Partial<Record<number, Migration>> = {};
+const migrations: Partial<Record<number, Migration>> = {
+  1: migrateV1ToV2
+};
+
+function migrateV1ToV2(data: unknown): unknown {
+  if (!isRecord(data) || !Array.isArray(data.items)) throw new Error('Invalid schema 1 data');
+  return {
+    ...data,
+    items: data.items.map((value) => {
+      if (!isRecord(value) || !Array.isArray(value.categoryIds) || !value.categoryIds.every((entry) => typeof entry === 'string')) {
+        throw new Error('Invalid schema 1 packing item');
+      }
+      const { categoryIds, ...item } = value;
+      const categoryId = categoryIds[0];
+      return categoryId === undefined ? item : { ...item, categoryId };
+    })
+  };
+}
 
 export function encodeAppData(data: AppData): string {
   const document: StoredDocument = { schemaVersion: CURRENT_SCHEMA_VERSION, data };
@@ -43,7 +58,9 @@ export function assertAppData(value: unknown): AppData {
 function isPackingItem(value: unknown): value is PackingItem {
   return isRecord(value) && typeof value.id === 'string' && typeof value.name === 'string'
     && typeof value.quantity === 'number' && typeof value.packed === 'boolean' && typeof value.owned === 'boolean'
-    && isStringArray(value.categoryIds) && isStringArray(value.phaseIds) && typeof value.notes === 'string';
+    && (value.categoryId === undefined || typeof value.categoryId === 'string')
+    && value.categoryIds === undefined
+    && isStringArray(value.phaseIds) && typeof value.notes === 'string';
 }
 
 function isCategory(value: unknown): value is Category {

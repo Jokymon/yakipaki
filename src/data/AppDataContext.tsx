@@ -66,7 +66,7 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     deleteCategory: (id) => update((current) => ({
       ...current,
       categories: current.categories.filter((category) => category.id !== id),
-      items: current.items.map((item) => ({ ...item, categoryIds: item.categoryIds.filter((categoryId) => categoryId !== id) }))
+      items: current.items.map((item) => item.categoryId === id ? { ...item, categoryId: undefined } : item)
     })),
     addPhase: (phase) => update((current) => ({ ...current, phases: [...current.phases, phase] })),
     updatePhase: (phase) => update((current) => ({ ...current, phases: current.phases.map((candidate) => candidate.id === phase.id ? phase : candidate) })),

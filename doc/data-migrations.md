@@ -18,7 +18,7 @@ Changing the application ID creates a separate Android app and therefore a separ
 
 ```json
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "data": {
     "language": "de",
     "items": [],
@@ -30,6 +30,8 @@ Changing the application ID creates a separate Android app and therefore a separ
 ```
 
 The permanent storage key does not contain a version number. This lets every future release find the document and apply all required migrations.
+
+Schema 2 changed item categories from `categoryIds: string[]` to one optional `categoryId`. Its migration deterministically retains the first previous category assignment so existing items remain categorized without inventing new relationships.
 
 ## Changing persisted data
 

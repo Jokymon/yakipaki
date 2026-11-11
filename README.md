@@ -126,7 +126,7 @@ After a successful run, download `yakipaki-preview-<run number>` from the run's 
 - Create, edit, delete, pack, and persist packing items locally
 - Mark items as owned and use the generated shopping list
 - Separate category and travel planning screens for user-managed categories, travel phases, and travel groups; phases support either a date range or a duration in days
-- Category, phase, group, short-use, and single-phase filters
+- Collapsible category groups plus phase, travel-group, short-use, and single-phase filters
 - German and English UI, switched from the Categories screen
 - Automatic light and dark themes following the device setting
 - Seed itinerary and items so the first launch is immediately playable

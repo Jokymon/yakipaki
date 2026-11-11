@@ -14,8 +14,8 @@ export const seedData: AppData = {
     { id: 'camping', name: 'Trekking Camping', startDate: '2027-04-13', endDate: '2027-04-18', collectionId: 'trekking' }
   ],
   items: [
-    { id: 'passport', name: 'Reisepass', quantity: 1, packed: true, owned: true, categoryIds: ['documents'], phaseIds: ['arrival', 'teahouse', 'camping'], notes: '' },
-    { id: 'jacket', name: 'Daunenjacke', quantity: 1, packed: false, owned: true, categoryIds: ['clothes', 'outdoors'], phaseIds: ['teahouse', 'camping'], notes: 'Leichtes Modell' },
-    { id: 'filter', name: 'Wasserfilter', quantity: 1, packed: false, owned: false, categoryIds: ['outdoors'], phaseIds: ['camping'], notes: '' }
+    { id: 'passport', name: 'Reisepass', quantity: 1, packed: true, owned: true, categoryId: 'documents', phaseIds: ['arrival', 'teahouse', 'camping'], notes: '' },
+    { id: 'jacket', name: 'Daunenjacke', quantity: 1, packed: false, owned: true, categoryId: 'clothes', phaseIds: ['teahouse', 'camping'], notes: 'Leichtes Modell' },
+    { id: 'filter', name: 'Wasserfilter', quantity: 1, packed: false, owned: false, categoryId: 'outdoors', phaseIds: ['camping'], notes: '' }
   ]
 };

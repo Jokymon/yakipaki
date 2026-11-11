@@ -53,7 +53,7 @@ export function CategoriesScreen() {
             <View style={[styles.color, { backgroundColor: value.color }]} />
             <View style={styles.entityText}>
               <Text style={styles.entityTitle}>{value.name}</Text>
-              <Text style={styles.detail}>{data.items.filter((item) => item.categoryIds.includes(value.id)).length} {t('objects').toLowerCase()}</Text>
+              <Text style={styles.detail}>{data.items.filter((item) => item.categoryId === value.id).length} {t('objects').toLowerCase()}</Text>
             </View>
             <Pressable accessibilityLabel={`${t('edit')}: ${value.name}`} hitSlop={8} onPress={() => editCategory(value.id)}><Text style={styles.edit}>✎</Text></Pressable>
             <Pressable hitSlop={8} onPress={() => { store.deleteCategory(value.id); if (editingId === value.id) resetForm(); }}><Text style={styles.remove}>×</Text></Pressable>

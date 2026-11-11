@@ -19,13 +19,13 @@ export function ItemEditor({ item, visible, onClose }: { item?: PackingItem; vis
   const [quantity, setQuantity] = useState(String(item?.quantity ?? 1));
   const [notes, setNotes] = useState(item?.notes ?? '');
   const [owned, setOwned] = useState(item?.owned ?? true);
-  const [categoryIds, setCategoryIds] = useState(item?.categoryIds ?? []);
+  const [categoryId, setCategoryId] = useState(item?.categoryId);
   const [phaseIds, setPhaseIds] = useState(item?.phaseIds ?? []);
 
   const toggle = (values: string[], id: string, setter: (value: string[]) => void) => setter(values.includes(id) ? values.filter((value) => value !== id) : [...values, id]);
   const submit = () => {
     if (!name.trim()) return;
-    saveItem({ id: item?.id ?? newId(), name: name.trim(), quantity: safeQuantity(quantity), notes: notes.trim(), owned, packed: item?.packed ?? false, categoryIds, phaseIds });
+    saveItem({ id: item?.id ?? newId(), name: name.trim(), quantity: safeQuantity(quantity), notes: notes.trim(), owned, packed: item?.packed ?? false, categoryId, phaseIds });
     onClose();
   };
 
@@ -42,7 +42,10 @@ export function ItemEditor({ item, visible, onClose }: { item?: PackingItem; vis
             <TextInput style={styles.input} value={quantity} onChangeText={setQuantity} keyboardType="number-pad" />
             <View style={styles.switchRow}><Text style={styles.switchLabel}>{t('owned')}</Text><Switch value={owned} onValueChange={setOwned} trackColor={{ true: colors.primary }} /></View>
             <Text style={styles.label}>{t('categories')}</Text>
-            <View style={styles.wrap}>{data.categories.map((category) => <Chip key={category.id} label={category.name} selected={categoryIds.includes(category.id)} color={category.color} onPress={() => toggle(categoryIds, category.id, setCategoryIds)} />)}</View>
+            <View style={styles.wrap}>
+              <Chip label={t('uncategorized')} selected={!categoryId} onPress={() => setCategoryId(undefined)} />
+              {data.categories.map((category) => <Chip key={category.id} label={category.name} selected={categoryId === category.id} color={category.color} onPress={() => setCategoryId(category.id)} />)}
+            </View>
             <Text style={styles.label}>{t('phases')}</Text>
             <View style={styles.wrap}>{data.phases.map((phase) => <Chip key={phase.id} label={phase.name} selected={phaseIds.includes(phase.id)} onPress={() => toggle(phaseIds, phase.id, setPhaseIds)} />)}</View>
             <Text style={styles.label}>{t('notes')}</Text>

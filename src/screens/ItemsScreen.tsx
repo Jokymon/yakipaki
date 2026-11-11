@@ -16,9 +16,29 @@ export function ItemsScreen({ shopping = false }: { shopping?: boolean }) {
   const t = (key: Parameters<typeof translate>[1]) => translate(data.language, key);
   const [filter, setFilter] = useState<Filter>({ kind: 'all' });
   const [editor, setEditor] = useState<PackingItem | 'new' | null>(null);
+  const [collapsedGroups, setCollapsedGroups] = useState<Set<string>>(() => new Set());
   const items = useMemo(() => data.items.filter((item) => (shopping ? !item.owned : true) && matchesFilter(item, filter, data)), [data, filter, shopping]);
+  const groups = useMemo(() => {
+    const categoryIds = new Set(data.categories.map((category) => category.id));
+    const categorized = data.categories.map((category) => ({
+      key: category.id,
+      name: category.name,
+      color: category.color,
+      items: items.filter((item) => item.categoryId === category.id)
+    }));
+    const uncategorized = items.filter((item) => !item.categoryId || !categoryIds.has(item.categoryId));
+    return [
+      ...categorized,
+      { key: '__uncategorized__', name: t('uncategorized'), color: colors.muted, items: uncategorized }
+    ].filter((group) => group.items.length > 0);
+  }, [colors.muted, data.categories, items, t]);
   const packed = data.items.filter((item) => item.packed).length;
   const selected = (kind: Filter['kind'], id?: string) => filter.kind === kind && (!id || ('id' in filter && filter.id === id));
+  const toggleGroup = (key: string) => setCollapsedGroups((current) => {
+    const next = new Set(current);
+    if (next.has(key)) next.delete(key); else next.add(key);
+    return next;
+  });
   const remove = (item: PackingItem) => Alert.alert(t('confirmDelete'), t('deleteItemText'), [{ text: t('cancel'), style: 'cancel' }, { text: t('delete'), style: 'destructive', onPress: () => deleteItem(item.id) }]);
 
   return (
@@ -33,35 +53,47 @@ export function ItemsScreen({ shopping = false }: { shopping?: boolean }) {
           <Chip label={t('all')} selected={selected('all')} onPress={() => setFilter({ kind: 'all' })} />
           <Chip label={t('shortUse')} selected={selected('short-use')} onPress={() => setFilter({ kind: 'short-use' })} />
           <Chip label={t('singlePhase')} selected={selected('single-phase')} onPress={() => setFilter({ kind: 'single-phase' })} />
-          {data.categories.map((category) => <Chip key={category.id} label={category.name} color={category.color} selected={selected('category', category.id)} onPress={() => setFilter({ kind: 'category', id: category.id })} />)}
           {data.collections.map((collection) => <Chip key={collection.id} label={`⌁ ${collection.name}`} selected={selected('collection', collection.id)} onPress={() => setFilter({ kind: 'collection', id: collection.id })} />)}
           {data.phases.map((phase) => <Chip key={phase.id} label={phase.name} selected={selected('phase', phase.id)} onPress={() => setFilter({ kind: 'phase', id: phase.id })} />)}
         </ScrollView>
       </View>
       <ScrollView contentContainerStyle={styles.list}>
         {items.length === 0 && <View style={styles.empty}><Text style={styles.emptyIcon}>✓</Text><Text style={styles.emptyText}>{t('empty')}</Text></View>}
-        {items.map((item) => {
-          const categories = data.categories.filter((category) => item.categoryIds.includes(category.id));
-          return (
-            <View key={item.id} style={[styles.card, item.packed && !shopping && styles.cardPacked]}>
-              <Pressable
-                accessibilityRole="checkbox"
-                accessibilityState={{ checked: shopping ? item.owned : item.packed }}
-                onPress={() => saveItem({ ...item, ...(shopping ? { owned: true } : { packed: !item.packed }) })}
-                style={[styles.checkbox, (shopping ? item.owned : item.packed) && styles.checkboxActive]}
-              ><Text style={styles.check}>{(shopping ? item.owned : item.packed) ? '✓' : ''}</Text></Pressable>
-              <View style={styles.cardBody}>
-                <Text style={[styles.itemName, item.packed && !shopping && styles.strike]}>{item.quantity > 1 ? `${item.quantity}× ` : ''}{item.name}</Text>
-                <View style={styles.metaRow}>
-                  {categories.map((category) => <View key={category.id} style={[styles.dot, { backgroundColor: category.color }]} />)}
-                  <Text style={styles.meta}>{t('usage')}: {itemUsageDays(item, data.phases)} d</Text>
-                  {!item.owned && <Text style={styles.buyBadge}>{t('shopping')}</Text>}
+        {groups.map((group) => {
+          const collapsed = collapsedGroups.has(group.key);
+          return <View key={group.key} style={styles.group}>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={`${collapsed ? t('expand') : t('collapse')}: ${group.name}`}
+              accessibilityState={{ expanded: !collapsed }}
+              onPress={() => toggleGroup(group.key)}
+              style={styles.groupHeader}
+            >
+              <View style={[styles.groupColor, { backgroundColor: group.color }]} />
+              <Text style={styles.groupName}>{group.name}</Text>
+              <Text style={styles.groupCount}>{group.items.length}</Text>
+              <Text style={styles.chevron}>{collapsed ? '▸' : '▾'}</Text>
+            </Pressable>
+            {!collapsed && <View style={styles.groupItems}>{group.items.map((item) => (
+              <View key={item.id} style={[styles.card, item.packed && !shopping && styles.cardPacked]}>
+                <Pressable
+                  accessibilityRole="checkbox"
+                  accessibilityState={{ checked: shopping ? item.owned : item.packed }}
+                  onPress={() => saveItem({ ...item, ...(shopping ? { owned: true } : { packed: !item.packed }) })}
+                  style={[styles.checkbox, (shopping ? item.owned : item.packed) && styles.checkboxActive]}
+                ><Text style={styles.check}>{(shopping ? item.owned : item.packed) ? '✓' : ''}</Text></Pressable>
+                <View style={styles.cardBody}>
+                  <Text style={[styles.itemName, item.packed && !shopping && styles.strike]}>{item.quantity > 1 ? `${item.quantity}× ` : ''}{item.name}</Text>
+                  <View style={styles.metaRow}>
+                    <Text style={styles.meta}>{t('usage')}: {itemUsageDays(item, data.phases)} d</Text>
+                    {!item.owned && <Text style={styles.buyBadge}>{t('shopping')}</Text>}
+                  </View>
                 </View>
+                <Pressable hitSlop={8} onPress={() => setEditor(item)} style={styles.iconButton}><Text style={styles.icon}>✎</Text></Pressable>
+                <Pressable hitSlop={8} onPress={() => remove(item)} style={styles.iconButton}><Text style={styles.deleteIcon}>×</Text></Pressable>
               </View>
-              <Pressable hitSlop={8} onPress={() => setEditor(item)} style={styles.iconButton}><Text style={styles.icon}>✎</Text></Pressable>
-              <Pressable hitSlop={8} onPress={() => remove(item)} style={styles.iconButton}><Text style={styles.deleteIcon}>×</Text></Pressable>
-            </View>
-          );
+            ))}</View>}
+          </View>;
         })}
       </ScrollView>
       {editor && <ItemEditor key={editor === 'new' ? 'new' : editor.id} item={editor === 'new' ? undefined : editor} visible onClose={() => setEditor(null)} />}
@@ -74,8 +106,8 @@ const createStyles = (colors: ThemeColors) => StyleSheet.create({
   eyebrow: { color: colors.primary, fontSize: 12, fontWeight: '800', textTransform: 'uppercase', letterSpacing: 0.7 }, title: { color: colors.ink, fontSize: 28, fontWeight: '900', letterSpacing: -0.6 },
   addButton: { width: 48, height: 48, borderRadius: 16, backgroundColor: colors.primary, alignItems: 'center', justifyContent: 'center' }, addText: { color: colors.onPrimary, fontSize: 27, lineHeight: 30 },
   filterLabel: { marginLeft: 20, color: colors.muted, fontSize: 12, fontWeight: '800', textTransform: 'uppercase', marginBottom: 7 }, chips: { gap: 7, paddingHorizontal: 20, paddingBottom: 15 },
-  list: { paddingHorizontal: 16, paddingBottom: 120, gap: 9 }, card: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.surface, padding: 13, borderRadius: 16, borderWidth: 1, borderColor: colors.border },
+  list: { paddingHorizontal: 16, paddingBottom: 120, gap: 14 }, group: { gap: 8 }, groupHeader: { minHeight: 42, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 8 }, groupColor: { width: 10, height: 28, borderRadius: 5, marginRight: 10 }, groupName: { flex: 1, color: colors.ink, fontSize: 16, fontWeight: '800' }, groupCount: { color: colors.muted, fontSize: 12, fontWeight: '700', marginRight: 8 }, chevron: { color: colors.primary, fontSize: 20 }, groupItems: { gap: 9 }, card: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.surface, padding: 13, borderRadius: 16, borderWidth: 1, borderColor: colors.border },
   cardPacked: { opacity: 0.63 }, checkbox: { width: 27, height: 27, borderRadius: 9, borderWidth: 2, borderColor: colors.checkbox, alignItems: 'center', justifyContent: 'center', marginRight: 12 }, checkboxActive: { backgroundColor: colors.primary, borderColor: colors.primary }, check: { color: colors.onPrimary, fontWeight: '900' },
-  cardBody: { flex: 1 }, itemName: { color: colors.ink, fontSize: 16, fontWeight: '700' }, strike: { textDecorationLine: 'line-through' }, metaRow: { flexDirection: 'row', alignItems: 'center', marginTop: 6, gap: 5 }, dot: { width: 8, height: 8, borderRadius: 4 }, meta: { color: colors.muted, fontSize: 11 }, buyBadge: { backgroundColor: colors.shoppingSoft, color: colors.shopping, fontSize: 10, fontWeight: '800', paddingHorizontal: 7, paddingVertical: 2, borderRadius: 999 },
+  cardBody: { flex: 1 }, itemName: { color: colors.ink, fontSize: 16, fontWeight: '700' }, strike: { textDecorationLine: 'line-through' }, metaRow: { flexDirection: 'row', alignItems: 'center', marginTop: 6, gap: 5 }, meta: { color: colors.muted, fontSize: 11 }, buyBadge: { backgroundColor: colors.shoppingSoft, color: colors.shopping, fontSize: 10, fontWeight: '800', paddingHorizontal: 7, paddingVertical: 2, borderRadius: 999 },
   iconButton: { padding: 6 }, icon: { color: colors.primary, fontSize: 21 }, deleteIcon: { color: colors.destructiveMuted, fontSize: 24 }, empty: { alignItems: 'center', paddingTop: 60 }, emptyIcon: { width: 50, height: 50, borderRadius: 25, backgroundColor: colors.primarySoft, color: colors.primary, fontSize: 30, textAlign: 'center', lineHeight: 48 }, emptyText: { color: colors.muted, marginTop: 12 }
 });
