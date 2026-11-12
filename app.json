@@ -2,13 +2,13 @@
   "expo": {
     "name": "Yakipaki",
     "slug": "yakipaki",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "icon": "./assets/app-icon.png",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
     "android": {
       "package": "ch.yakipaki.app",
-      "versionCode": 2,
+      "versionCode": 3,
       "adaptiveIcon": {
         "foregroundImage": "./assets/app-icon.png",
         "backgroundColor": "#FFF4DF"

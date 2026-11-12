@@ -2,7 +2,7 @@
 
 Android-first packing-list MVP built with Expo, React Native, TypeScript, and local SQLite storage.
 
-Current preview release: **0.2.0** (`preview-0.2.0`). See [`CHANGELOG.md`](CHANGELOG.md) for release notes.
+Current preview release: **0.2.1** (`preview-0.2.1`). See [`CHANGELOG.md`](CHANGELOG.md) for release notes.
 
 The launcher icon is stored at [`assets/app-icon.png`](assets/app-icon.png) and configured through `app.json` for standard and Android adaptive icons.
 
@@ -102,7 +102,7 @@ Yakipaki stores a versioned document under the permanent local key `yakipaki.dat
 The [`Build preview APK`](.github/workflows/preview-apk.yml) workflow validates the project, creates a signed EAS preview build, downloads the APK, and attaches it to the GitHub Actions run for 30 days. It runs:
 
 - manually through **Actions → Build preview APK → Run workflow**; or
-- when pushing a tag whose name starts with `preview-`, for example `preview-0.2.0`.
+- when pushing a tag whose name starts with `preview-`, for example `preview-0.2.1`.
 
 Complete this one-time setup before the first CI build:
 
@@ -123,12 +123,12 @@ Complete this one-time setup before the first CI build:
 
 After a successful run, download `yakipaki-preview-<run number>` from the run's **Artifacts** section. The archive contains `yakipaki-preview.apk` and EAS build metadata. Every CI build uses the same package ID, EAS signing credentials, and auto-incremented version code so it can update earlier EAS preview installations without clearing their local data.
 
-Commit the prepared release state, then create and push the preview 0.2.0 tag with:
+Commit the prepared release state, then create and push the preview 0.2.1 tag with:
 
 ```powershell
-git commit -m "Prepare Yakipaki preview 0.2.0"
-git tag -a preview-0.2.0 -m "Yakipaki preview 0.2.0"
-git push origin HEAD preview-0.2.0
+git commit -m "Prepare Yakipaki preview 0.2.1"
+git tag -a preview-0.2.1 -m "Yakipaki preview 0.2.1"
+git push origin HEAD preview-0.2.1
 ```
 
 ## Included in the MVP

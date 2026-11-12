@@ -2,6 +2,17 @@
 
 All notable changes to Yakipaki preview releases are documented here.
 
+## 0.2.1 — 2026-11-12
+
+### Changed
+
+- Updated the supported development and build runtime to Node.js 26.
+- Pinned Node.js 26.13.0 consistently for local version managers, GitHub Actions validation, and EAS preview and production builds.
+
+### Fixed
+
+- Fixed preview APK validation failing before the EAS build because Node.js 22.13 could not execute the TypeScript schema tests without an experimental flag.
+
 ## 0.2.0 — 2026-11-11
 
 ### Added
