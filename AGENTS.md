@@ -24,7 +24,7 @@ Do not introduce accounts, cloud synchronization, analytics, advertising, or net
 - Plain React context and hooks for current state management.
 - React Native `StyleSheet`, `ThemeProvider`, and the paired palettes in `src/theme.ts` for presentation. The app follows the device color scheme; UI code must use `useTheme()` rather than importing a fixed palette.
 - No navigation framework in the MVP; `App.tsx` owns the four-tab shell for packing, shopping, categories, and travel.
-- Minimum supported Node.js version: 22.13.
+- Supported Node.js release line: 26.x (the pinned development and build version is in `.nvmrc`).
 
 Use Expo-compatible package versions. Add native dependencies with `npx expo install <package>`, then run Expo Doctor. Avoid adding a library when a small, maintainable implementation using the current stack is sufficient.
 

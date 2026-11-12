@@ -6,7 +6,7 @@ Start with [AGENTS.md](AGENTS.md); it is the canonical architecture and workflow
 
 Requirements:
 
-- Node.js 22.13 or newer
+- Node.js 26.x (use the version pinned in `.nvmrc`)
 - npm
 - Android device with USB debugging and Expo Go, or an Android emulator
 - JDK 17 and Android SDK Platform 37 when compiling native Android binaries locally
